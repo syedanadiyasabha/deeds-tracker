@@ -76,12 +76,14 @@
             }
         ];
         let html = "";
+        let n=0;
 
         for (const entry of deeds) {
             html += "<h3>" + entry.section + " - " + entry.group + "</h3>";
 
          for (const item of entry.items) {
-             html += "<label><input type='checkbox'> " + item + "</label><br>";
+             html += "<label><input type='checkbox' id='c" + n + "'> " + item + "</label><br>";
+             n++;
         }
 
         document.getElementById("app").innerHTML = html;
