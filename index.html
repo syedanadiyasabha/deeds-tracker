@@ -1,82 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Deeds Tracker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DEEDS-TRACKER</title>
 </head>
+
 <body>
-  <h1>Deeds Tracker</h1>
-  <p>Assalamu alaikum warahmatulla ! Welcome.</p>
-  <p>
-    <ol>
-        <li>Fard / Obligatory </li>
-    
-    <ul>
-        <li> Fajr</li>
-         <li>  Zohr</li>
-          <li> Asr</li>
-           <li>Maghrib </li>
-            <li>Isha </li>
-    </ul>
-    
-        <li>Zikr</li>
-        <ol>
-        <li>AFTER FAJR</li>
-        
-        <ul>
-        
-        <li>Between Fajr sunnat and fard prayer read ⬇<br>Subhanallahi wa bihamdihi, subhanallahil azeem, astaghfirullah (100X)" Glory be to Allah and all praise is due to Him, Glory be to Allah the Great, I seek forgiveness from Allah.</li>
-        <li>Quran Recitation </li>
-        <li>La ilaha illallahu wahdahu la sharika lahu, lahul-mulku wa lahul-hamdu, wa huwa 'ala kulli shay'in qadir (100x)</li>
+    <h1>DEEDS-TRACKER</h1>
+    <p>Assalamu alaikum warahmatulla ! Welcome.</p>
+    <div id="app"></div>
 
-        </ul>  
-        <li>BEFORE ZOHR</li>
-        <ul>
-            <li>Subhanallahi (10X)</li>
-            <li>Alhamdulillahi (10X)</li>
-            <li>AllahuAkbar (10X)</li>
-        </ul>
-        <li>AFTER ZOHR</li>
-        <ul>
-            <li>Darood Sharif (100X)</li>
-            <li>La ilaha illallahu muhammadur rasulullah (100X)</li>
-        </ul>
-        <li>AFTER ASAR</li>
-        <ul>
-            <li>Surah Al Baqarah(50 verses daily)</li>
-        </ul>
-        <li>AFTER MAGHRIB</li>
-        <ul>
-            <li>La ilaha illallahu wahdahu la sharika lahu, lahul-mulku wa lahul-hamdu, wa huwa 'ala kulli shay'in qadir (10x)</li>
-            <li>Surah Al Waqiah</li>
-        </ul>
-        <li>AFTER ISHA</li>
-        <ul>
-            <li>Surah Al Mulk</li>
-            <li>Surah Al Sajda</li>
-        </ul>
+    <script>
+        const deeds = [
+            {
+                section: "Fard / Obligatory",
+                group: "Five daily prayers",
+                items: ["Fajr", "Zohr", "Asr", "Maghrib", "Isha"]
+            },
+            {
+                section: "Zikr",
+                group: "After Fajr",
+                items: ["Quran Recitation",
+                    "Subhanallahi wa bihamdihi  subhanallahil azeem,astaghfirullah (100x)",
+                    "La ilaha illallahu wahdahu la sharika lahu, lahul-mulku wa lahul-hamdu, wa huwa 'ala kulli shay'in  qadir (100x)"]
+            },
+            {
+                section: "Zikr",
+                group: "Before Zohr",
+                items: ["Subhanallah (10x)",
+                    "Alhamdulillah (10x)",
+                    "AllahuAkbar (10x)"]
+            },
+            {
+                section: "Zikr",
+                group: "After Zohr",
+                items: ["Darood Sharif (100X)",
+                    "La ilaha illallahu muhammadur rasulullah (100X)"]
+            },
+            {
+                section: "Zikr",
+                group: "After Asar",
+                items: ["Surah Al Baqarah(50 verses daily)"]
+            },
+            {
+                section: "Zikr",
+                group: "After Maghrib",
+                items: ["La ilaha illallahu wahdahu la sharika lahu, lahul-mulku wa lahul-hamdu, wa huwa 'ala kulli shay'inqadir (10x)",
+                    "Surah Al Waqiah"]
+            },
+            {
+                section: "Zikr",
+                group: "After Isha",
+                items: ["Surah Al Mulk",
+                    "Surah Al Sajda"]
+            },
+            {
+                section: "Zikr",
+                group: "Bed-Time",
+                items: ["Surah Al Fatihah (4x)",
+                    "Surah Al Ikhlas (3x)",
+                    "Astaghfirullah (10x)",
+                    "Durood (10x)",
+                    "Third Kalima (4x)"]
+            },
+            {
+                section: "Weekly Challenges",
+                group: "Nafl-Prayers",
+                items: ["Tahajjud",
+                    "Salatul Duha",
+                    "Salatul Tauba",
+                    "Salatul Hajat"
+                ]
+            }
+        ];
+        let html = "";
 
-        <li>BED-TIME ZIKR</li>
-        <ul>
-            <li>Surah Al Fatihah (4x)</li>
-            <li>Surah Al Ikhlas (3x)</li>
-            <li>Astaghfirullah (10x)</li>
-            <li>Durood (10x)</li>
-            <li>Third Kalima (4x)</li>
-        </ul>
-        </ol>
+        for (const entry of deeds) {
+            html += "<h3>" + entry.section + " - " + entry.group + "</h3>";
 
-    <li>WEEKLY CHALLENGES</li>
-    
-        <ul>
-            <li> Tahajjud </li>
-            <li> Salatul Duha</li>
-            <li> Salatul Tauba</li>
-            <li>Salatul Hajat</li>
-        </ul>   
-    </ul>
-    </ol>
-  </p>
+         for (const item of entry.items) {
+             html += "<label><input type='checkbox'> " + item + "</label><br>";
+        }
+
+        document.getElementById("app").innerHTML = html;
+    }
+    </script>
 </body>
+
 </html>
