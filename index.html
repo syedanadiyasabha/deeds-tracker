@@ -9,7 +9,7 @@
 
 <body>
     <h1>DEEDS-TRACKER</h1>
-    <p>Assalamu alaikum warahmatulla ! Welcome.</p>
+     <p id="welcome">Assalamu alaikum warahmatulla ! Welcome.</p>
     <div id="app"></div>
 
     <script>
@@ -104,6 +104,31 @@
           document.getElementById(id).checked = true;
         }
 
+// Function to generate welcome message;
+
+        function updateWelcome() {
+            const today = new Date().toLocaleDateString("en-IN", {
+            weekday: "long", day: "numeric", month: "long", year: "numeric"
+    });
+
+    let prayed = 0;
+    for (let i = 0; i < 5; i++) {
+        if (document.getElementById("c" + i).checked) {
+        prayed++;
+    }
+    } 
+
+        let message = "Assalamu alaikum! Today is " + today + ". You have prayed " + prayed + " of 5 prayers.";
+
+        if (prayed === 5) {
+
+            message = message + " MashaAllah, all five prayers done! May Allah accept them.";
+            }
+
+            document.getElementById("welcome").textContent = message;
+         }
+
+    updateWelcome();
 //6. Save on every tick;
 
         document.getElementById("app").addEventListener("change", function () {
@@ -115,7 +140,10 @@
         }
   }
   localStorage.setItem(todayKey, JSON.stringify(ticked));
+    
+  updateWelcome();
 });
+
     
     </script>
 </body>
