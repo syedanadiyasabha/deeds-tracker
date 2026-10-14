@@ -9,28 +9,35 @@
 
 <body>
     <h1>DEEDS-TRACKER</h1>
-     <p id="welcome">Assalamu alaikum warahmatulla ! Welcome.</p>
+    <p id="welcome">Assalamu alaikum warahmatulla ! Welcome.</p>
+    <p id="points"></p>
     <div id="app"></div>
 
     <script>
-// 1.Deeds array ;
-    
+        // 1.Deeds array ;
+
         const deeds = [
             {
                 section: "Fard / Obligatory",
                 group: "Five daily prayers",
+                type: "fard",
+                points: 50,
                 items: ["Fajr", "Zohr", "Asr", "Maghrib", "Isha"]
             },
             {
                 section: "Zikr",
                 group: "After Fajr",
+                type: "zikr",
+                points: 10,
                 items: ["Quran Recitation",
-                    "Subhanallahi wa bihamdihi  subhanallahil azeem,astaghfirullah (100x)",
+                    "Subhanallahi wa bihamdihi  subhanallahil azeem, astaghfirullah (100x)",
                     "La ilaha illallahu wahdahu la sharika lahu, lahul-mulku wa lahul-hamdu, wa huwa 'ala kulli shay'in  qadir (100x)"]
             },
             {
                 section: "Zikr",
                 group: "Before Zohr",
+                type: "zikr",
+                points: 10,
                 items: ["Subhanallah (10x)",
                     "Alhamdulillah (10x)",
                     "AllahuAkbar (10x)"]
@@ -38,29 +45,39 @@
             {
                 section: "Zikr",
                 group: "After Zohr",
+                type: "zikr",
+                points: 10,
                 items: ["Darood Sharif (100X)",
                     "La ilaha illallahu muhammadur rasulullah (100X)"]
             },
             {
                 section: "Zikr",
                 group: "After Asar",
+                type: "zikr",
+                points: 5,
                 items: ["Surah Al Baqarah(50 verses daily)"]
             },
             {
                 section: "Zikr",
                 group: "After Maghrib",
-                items: ["La ilaha illallahu wahdahu la sharika lahu, lahul-mulku wa lahul-hamdu, wa huwa 'ala kulli shay'inqadir (10x)",
+                type: "zikr",
+                points: 10, 
+                items: ["La ilaha illallahu wahdahu la sharika lahu, lahul-mulku wa lahul-hamdu, wa huwa 'ala kulli shay'in qadir (10x)",
                     "Surah Al Waqiah"]
             },
             {
                 section: "Zikr",
                 group: "After Isha",
+                type: "zikr",
+                points: 5,
                 items: ["Surah Al Mulk",
                     "Surah Al Sajda"]
             },
             {
                 section: "Zikr",
                 group: "Bed-Time",
+                type: "zikr",
+                points: 10,
                 items: ["Surah Al Fatihah (4x)",
                     "Surah Al Ikhlas (3x)",
                     "Astaghfirullah (10x)",
@@ -70,6 +87,8 @@
             {
                 section: "Weekly Challenges",
                 group: "Nafl-Prayers",
+                type: "weekly",
+                points: 15,
                 items: ["Tahajjud",
                     "Salatul Duha",
                     "Salatul Tauba",
@@ -77,74 +96,118 @@
                 ]
             }
         ];
-// 2. Build html;
+        // 2. Build html;
         let html = "";
-        let n=0;
+        let n = 0;
 
         for (const entry of deeds) {
             html += "<h3>" + entry.section + " - " + entry.group + "</h3>";
 
-         for (const item of entry.items) {
-             html += "<label><input type='checkbox' id='c" + n + "'> " + item + "</label><br>";
-             n++;
+            for (const item of entry.items) {
+                html += "<label><input type='checkbox' id='c" + n + "' data-points='" + entry.points + "' data-type='" + entry.type + "'> " + item + "</label><br>";
+                n++;
+            }
         }
-    }
-// 3. Show it on page;
+        // 3. Show it on page;
         document.getElementById("app").innerHTML = html;
 
-// 4. The Date key;
+        // 4. The Date key;
         const d = new Date();
         const todayKey = "deeds-" + d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 
-//5. Restore saved ticks;
+        //5. Restore saved ticks;
 
         const saved = JSON.parse(localStorage.getItem(todayKey) || "[]");
 
         for (const id of saved) {
-          document.getElementById(id).checked = true;
+            const box = document.getElementById(id);
+            if (box) {
+                box.checked = true;
+            }
         }
+            // Function to generate welcome message;
 
-// Function to generate welcome message;
+            function updateWelcome() {
+                const today = new Date().toLocaleDateString("en-IN", {
+                    weekday: "long", day: "numeric", month: "long", year: "numeric"
+                });
 
-        function updateWelcome() {
-            const today = new Date().toLocaleDateString("en-IN", {
-            weekday: "long", day: "numeric", month: "long", year: "numeric"
-    });
+                let prayed = 0;
+                for (let i = 0; i < 5; i++) {
+                    if (document.getElementById("c" + i).checked) {
+                        prayed++;
+                    }
+                }
 
-    let prayed = 0;
-    for (let i = 0; i < 5; i++) {
-        if (document.getElementById("c" + i).checked) {
-        prayed++;
-    }
-    } 
+                let message = "Assalamu alaikum! Today is " + today + ". You have prayed " + prayed + " of 5 prayers.";
 
-        let message = "Assalamu alaikum! Today is " + today + ". You have prayed " + prayed + " of 5 prayers.";
+                if (prayed === 5) {
 
-        if (prayed === 5) {
+                    message = message + " MashaAllah, all five prayers done! May Allah accept them.";
+                }
 
-            message = message + " MashaAllah, all five prayers done! May Allah accept them.";
+                document.getElementById("welcome").textContent = message;
             }
 
-            document.getElementById("welcome").textContent = message;
-         }
+            updateWelcome();
 
-    updateWelcome();
-//6. Save on every tick;
+            // Points function
 
-        document.getElementById("app").addEventListener("change", function () {
-        const ticked = [];
-        const boxes = document.querySelectorAll("#app input[type=checkbox]");
-        for (const box of boxes) {
-        if (box.checked) {
-        ticked.push(box.id);
-        }
-  }
-  localStorage.setItem(todayKey, JSON.stringify(ticked));
-    
-  updateWelcome();
-});
+            function updatePoints() {
+                let points = 0;
+                let fardDone = 0;
+                let zikrDone = 0;
+                let zikrTotal = 0;
 
-    
+                const boxes = document.querySelectorAll("#app input[type=checkbox]");
+                for (const box of boxes) {
+                    if (box.dataset.type === "zikr") {
+                        zikrTotal++;
+                    }
+                    if (box.checked) {
+                        points += Number(box.dataset.points);
+                        if (box.dataset.type === "fard") {
+                            fardDone++;
+                        }
+                        if (box.dataset.type === "zikr") {
+                            zikrDone++;
+                        }
+                    }
+                }
+
+                let message = "";
+
+                if (fardDone === 5) {
+                    
+                    message = "MashaAllah, all five prayers done!";
+                }
+
+                if (fardDone === 5 && zikrDone === zikrTotal) {
+                    points += 30;
+                    message = "Alhamdulillah, a perfect day! May Allah accept it all.";
+                }
+
+                document.getElementById("points").textContent = "Points today: " + points + " " + message;
+            }
+
+            updatePoints();
+            //6. Save on every tick;
+
+            document.getElementById("app").addEventListener("change", function () {
+                const ticked = [];
+                const boxes = document.querySelectorAll("#app input[type=checkbox]");
+                for (const box of boxes) {
+                    if (box.checked) {
+                        ticked.push(box.id);
+                    }
+                }
+                localStorage.setItem(todayKey, JSON.stringify(ticked));
+
+                updateWelcome();
+                updatePoints();
+            });
+
+
     </script>
 </body>
 
