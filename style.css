@@ -1,0 +1,26 @@
+   body {
+       font-family: system-ui, sans-serif;
+       max-width: 700px;
+       margin: 0 auto;
+       padding: 16px;
+       background: #f3f6f4;
+       color: #1f2a37;
+   }
+
+   h1 {
+       text-align: center;
+       color: #1d6b57;
+   }
+
+   .group {
+       background: #fff;
+       padding: 12px;
+       margin-bottom: 14px;
+       border-radius: 12px;
+       border: 1px solid #d8e2dc;
+   }
+
+   label {
+       display: block;
+       padding: 8px 0;
+   }

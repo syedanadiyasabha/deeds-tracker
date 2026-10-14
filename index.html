@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DEEDS-TRACKER</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -61,7 +62,7 @@
                 section: "Zikr",
                 group: "After Maghrib",
                 type: "zikr",
-                points: 10, 
+                points: 10,
                 items: ["La ilaha illallahu wahdahu la sharika lahu, lahul-mulku wa lahul-hamdu, wa huwa 'ala kulli shay'in qadir (10x)",
                     "Surah Al Waqiah"]
             },
@@ -101,12 +102,15 @@
         let n = 0;
 
         for (const entry of deeds) {
+            html += "<div class='group'>";
             html += "<h3>" + entry.section + " - " + entry.group + "</h3>";
+
 
             for (const item of entry.items) {
                 html += "<label><input type='checkbox' id='c" + n + "' data-points='" + entry.points + "' data-type='" + entry.type + "'> " + item + "</label><br>";
                 n++;
             }
+            html += "</div>";
         }
         // 3. Show it on page;
         document.getElementById("app").innerHTML = html;
@@ -125,87 +129,87 @@
                 box.checked = true;
             }
         }
-            // Function to generate welcome message;
+        // Function to generate welcome message;
 
-            function updateWelcome() {
-                const today = new Date().toLocaleDateString("en-IN", {
-                    weekday: "long", day: "numeric", month: "long", year: "numeric"
-                });
+        function updateWelcome() {
+            const today = new Date().toLocaleDateString("en-IN", {
+                weekday: "long", day: "numeric", month: "long", year: "numeric"
+            });
 
-                let prayed = 0;
-                for (let i = 0; i < 5; i++) {
-                    if (document.getElementById("c" + i).checked) {
-                        prayed++;
+            let prayed = 0;
+            for (let i = 0; i < 5; i++) {
+                if (document.getElementById("c" + i).checked) {
+                    prayed++;
+                }
+            }
+
+            let message = "Assalamu alaikum! Today is " + today + ". You have prayed " + prayed + " of 5 prayers.";
+
+            if (prayed === 5) {
+
+                message = message + " MashaAllah, all five prayers done! May Allah accept them.";
+            }
+
+            document.getElementById("welcome").textContent = message;
+        }
+
+        updateWelcome();
+
+        // Points function
+
+        function updatePoints() {
+            let points = 0;
+            let fardDone = 0;
+            let zikrDone = 0;
+            let zikrTotal = 0;
+
+            const boxes = document.querySelectorAll("#app input[type=checkbox]");
+            for (const box of boxes) {
+                if (box.dataset.type === "zikr") {
+                    zikrTotal++;
+                }
+                if (box.checked) {
+                    points += Number(box.dataset.points);
+                    if (box.dataset.type === "fard") {
+                        fardDone++;
+                    }
+                    if (box.dataset.type === "zikr") {
+                        zikrDone++;
                     }
                 }
-
-                let message = "Assalamu alaikum! Today is " + today + ". You have prayed " + prayed + " of 5 prayers.";
-
-                if (prayed === 5) {
-
-                    message = message + " MashaAllah, all five prayers done! May Allah accept them.";
-                }
-
-                document.getElementById("welcome").textContent = message;
             }
+
+            let message = "";
+
+            if (fardDone === 5) {
+
+                message = "MashaAllah, all five prayers done!";
+            }
+
+            if (fardDone === 5 && zikrDone === zikrTotal) {
+                points += 30;
+                message = "Alhamdulillah, a perfect day! May Allah accept it all.";
+            }
+
+            document.getElementById("points").textContent = "Points today: " + points + (message ? " - " + message : "")
+        }
+
+        updatePoints();
+        //6. Save on every tick;
+
+        document.getElementById("app").addEventListener("change", function () {
+            const ticked = [];
+            const boxes = document.querySelectorAll("#app input[type=checkbox]");
+            for (const box of boxes) {
+                if (box.checked) {
+                    ticked.push(box.id);
+                }
+            }
+            localStorage.setItem(todayKey, JSON.stringify(ticked));
 
             updateWelcome();
-
-            // Points function
-
-            function updatePoints() {
-                let points = 0;
-                let fardDone = 0;
-                let zikrDone = 0;
-                let zikrTotal = 0;
-
-                const boxes = document.querySelectorAll("#app input[type=checkbox]");
-                for (const box of boxes) {
-                    if (box.dataset.type === "zikr") {
-                        zikrTotal++;
-                    }
-                    if (box.checked) {
-                        points += Number(box.dataset.points);
-                        if (box.dataset.type === "fard") {
-                            fardDone++;
-                        }
-                        if (box.dataset.type === "zikr") {
-                            zikrDone++;
-                        }
-                    }
-                }
-
-                let message = "";
-
-                if (fardDone === 5) {
-                    
-                    message = "MashaAllah, all five prayers done!";
-                }
-
-                if (fardDone === 5 && zikrDone === zikrTotal) {
-                    points += 30;
-                    message = "Alhamdulillah, a perfect day! May Allah accept it all.";
-                }
-
-                document.getElementById("points").textContent = "Points today: " + points + " " + message;
-            }
-
             updatePoints();
-            //6. Save on every tick;
-
-            document.getElementById("app").addEventListener("change", function () {
-                const ticked = [];
-                const boxes = document.querySelectorAll("#app input[type=checkbox]");
-                for (const box of boxes) {
-                    if (box.checked) {
-                        ticked.push(box.id);
-                    }
-                }
-                localStorage.setItem(todayKey, JSON.stringify(ticked));
-
-                updateWelcome();
-                updatePoints();
-            });
+        });
 
 
     </script>
