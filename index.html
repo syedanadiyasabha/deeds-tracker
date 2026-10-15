@@ -12,6 +12,8 @@
     <h1>DEEDS-TRACKER</h1>
     <p id="welcome">Assalamu alaikum warahmatulla ! Welcome.</p>
     <p id="points"></p>
+    <h2>This month</h2>
+    <div id="month"></div>
     <div id="app"></div>
 
     <script>
@@ -107,7 +109,7 @@
 
 
             for (const item of entry.items) {
-                html += "<label><input type='checkbox' id='c" + n + "' data-points='" + entry.points + "' data-type='" + entry.type + "'> " + item + "</label><br>";
+                html += "<label><input type='checkbox' id='c" + n + "' data-points='" + entry.points + "' data-type='" + entry.type + "'> " + item + "</label>";
                 n++;
             }
             html += "</div>";
@@ -206,11 +208,44 @@
                 }
             }
             localStorage.setItem(todayKey, JSON.stringify(ticked));
-
+            buildMonth();
             updateWelcome();
             updatePoints();
+            buildMonth();
         });
 
+        function buildMonth() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const fardIds = ["c0", "c1", "c2", "c3", "c4"];
+
+            let grid = "";
+            for (let day = 1; day <= daysInMonth; day++) {
+                const key = "deeds-" + year + "-" + (month + 1) + "-" + day;
+                const savedDay = JSON.parse(localStorage.getItem(key) || "[]");
+
+                let fard = 0;
+                for (const id of savedDay) {
+                    if (fardIds.includes(id)) {
+                        fard++;
+                    }
+                }
+                let cls = "day";
+
+                if (day === now.getDate()) {
+                    cls = "day today";
+                }
+               
+                grid += "<div class='" + cls + "'>" + day + "<br>" + fard + "/5</div>";
+                
+            }
+
+            document.getElementById("month").innerHTML = grid;
+        }
+
+        buildMonth();
 
     </script>
 </body>
