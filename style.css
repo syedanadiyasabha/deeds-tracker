@@ -46,3 +46,8 @@
        color: #fff;
        font-weight: bold;
    }
+
+   .selected {
+       outline: 3px solid #e0a82e;
+       outline-offset: 1px;
+   }

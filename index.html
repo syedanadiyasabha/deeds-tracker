@@ -131,6 +131,21 @@
                 box.checked = true;
             }
         }
+
+        // Function to Click a day to view and fix it
+        let currentKey = todayKey;
+
+        function loadDay(key) {
+            currentKey = key;
+            const savedDay = JSON.parse(localStorage.getItem(key) || "[]");
+            const boxes = document.querySelectorAll("#app input[type=checkbox]");
+            for (const box of boxes) {
+                box.checked = savedDay.includes(box.id);
+            }
+            updateWelcome();
+            updatePoints();
+            buildMonth();
+        }
         // Function to generate welcome message;
 
         function updateWelcome() {
@@ -207,11 +222,11 @@
                     ticked.push(box.id);
                 }
             }
-            localStorage.setItem(todayKey, JSON.stringify(ticked));
+            localStorage.setItem(currentKey, JSON.stringify(ticked));
             buildMonth();
             updateWelcome();
             updatePoints();
-            buildMonth();
+            
         });
 
         function buildMonth() {
@@ -232,14 +247,16 @@
                         fard++;
                     }
                 }
-                let cls = "day";
 
+                let cls = "day";
                 if (day === now.getDate()) {
                     cls = "day today";
                 }
-               
-                grid += "<div class='" + cls + "'>" + day + "<br>" + fard + "/5</div>";
-                
+                if (key === currentKey) {
+                    cls = cls + " selected";
+                }
+
+                grid += "<div class='" + cls + "' data-key='" + key + "'>" + day + "<br>" + fard + "/5</div>";
             }
 
             document.getElementById("month").innerHTML = grid;
@@ -247,6 +264,13 @@
 
         buildMonth();
 
+        document.getElementById("month").addEventListener("click", function (e) {
+            const box = e.target.closest(".day");
+            if (box) {
+                loadDay(box.dataset.key);
+            }
+        });
+    
     </script>
 </body>
 
